@@ -13,8 +13,14 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    netlist.cpp \
+    netcmpmodel.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    netlist.h \
+    netcmpmodel.h
 
 FORMS    += mainwindow.ui
+
+RC_FILE += netcmp.rc

@@ -7,92 +7,75 @@
     <x>0</x>
     <y>0</y>
     <width>694</width>
-    <height>471</height>
+    <height>688</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Netlist comparison</string>
+   <string>Сравнение нетлистов</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>netcmp.ico</normaloff>netcmp.ico</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout_5">
+   <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <item>
-           <widget class="QLineEdit" name="firstNetlist">
-            <property name="placeholderText">
-             <string>First netlist</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="firstBrowse">
-            <property name="text">
-             <string>Browse...</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <widget class="QTreeView" name="treeView"/>
-        </item>
-       </layout>
+       <widget class="QLineEdit" name="leftNetlist">
+        <property name="placeholderText">
+         <string>Первый нетлист</string>
+        </property>
+       </widget>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_4">
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
-          <item>
-           <widget class="QLineEdit" name="secondNetlist">
-            <property name="placeholderText">
-             <string>Second netlist</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="secondBrowse">
-            <property name="text">
-             <string>Browse...</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <widget class="QTreeView" name="treeView_2"/>
-        </item>
-       </layout>
+       <widget class="QPushButton" name="leftBrowse">
+        <property name="text">
+         <string>Обзор...</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="rightNetlist">
+        <property name="placeholderText">
+         <string>Второй нетлист</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="rightBrowse">
+        <property name="text">
+         <string>Обзор...</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
+    <item>
+     <widget class="QCheckBox" name="showDifferenceOnly">
+      <property name="text">
+       <string>Показывать только различия</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QTreeView" name="netCmpView">
+      <property name="selectionMode">
+       <enum>QAbstractItemView::ExtendedSelection</enum>
+      </property>
+      <property name="indentation">
+       <number>0</number>
+      </property>
+      <property name="headerHidden">
+       <bool>true</bool>
+      </property>
+      <attribute name="headerStretchLastSection">
+       <bool>false</bool>
+      </attribute>
+     </widget>
+    </item>
    </layout>
-   <zorder>formLayoutWidget_2</zorder>
-   <zorder>horizontalLayoutWidget_3</zorder>
-   <zorder>label</zorder>
   </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>694</width>
-     <height>25</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-  </widget>
-  <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
