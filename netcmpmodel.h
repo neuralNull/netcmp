@@ -114,6 +114,8 @@ class NetCmpModel : public QAbstractItemModel
 public:
   // Конструктор
   explicit NetCmpModel(QObject *parent = nullptr);
+  // Деструктор
+  ~NetCmpModel() { clear(); }
 
   // Метод сравнения нетлистов
   void compareNetlists(Netlist *leftNetlist, Netlist *rightNetlist);
