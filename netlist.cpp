@@ -84,7 +84,7 @@ void Netlist::readFromFile(const QString &filename)
       }
     }
   }
-  //
+  // Использование оставшегося формата нетлиста
   else
   {
     // Извлечение информации о цепях
@@ -154,7 +154,7 @@ Node::Node(const QString &displayName, QObject *parent) :
 
   // Игнорирование виртуальных частей элемента (встречается в узлах,
   // описывающих микросхемы)
-  name = name.split('.').first();
+  if (name[0] != 'X') name = name.split('.').first();
 
   // Создание унифицированного имени
   m_name = name + ":" + pin;

@@ -102,9 +102,9 @@ public slots:
     m_netMap[net->name()] = net; }
   // Метод добавления узла в цепь
   void addNode(Net *net, Node *node)
-  { if (m_nodeMap.contains(node->name()))
-      m_nodeMap[node->name()]->deleteLater();
-    m_nodeMap[node->name()] = node; net->addNode(node); }
+  { if (!m_nodeMap.contains(node->name())) {
+      m_nodeMap[node->name()] = node; net->addNode(node);
+    } else node->deleteLater(); }
 };
 
 #endif // NETLIST_H
