@@ -13,6 +13,7 @@ class QSettings;
 class QLineEdit;
 class Netlist;
 class NetCmpModel;
+class QPrinter;
 
 
 
@@ -34,8 +35,11 @@ private slots:
   // Слоты элементов управления
   void on_leftBrowse_clicked();
   void on_rightBrowse_clicked();
+  void on_font_clicked();
+  void on_print_clicked();
   void netlistReturnPressed();
   void on_showDifferenceOnly_toggled(bool checked);
+  void paintRequested(QPrinter *printer);
 
 private:
   // Интерфейс главного окна
@@ -44,6 +48,8 @@ private:
   QSettings *m_settings;
   // Последняя открытая директория
   QString m_lastDir;
+
+  QFont m_cmpFont;
 
   // Левый нетлист
   Netlist *m_leftNetlist;

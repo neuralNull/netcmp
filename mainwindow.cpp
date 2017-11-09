@@ -8,6 +8,10 @@
 #include <QFileDialog>
 #include <QSettings>
 #include <QDir>
+#include <QPainter>
+#include <QPrinter>
+#include <QFontDialog>
+#include <QPrintPreviewDialog>
 
 // Конструктор главного окна программы
 MainWindow::MainWindow(QWidget *parent) :
@@ -45,6 +49,9 @@ MainWindow::MainWindow(QWidget *parent) :
   // Восстановление флага отображения различий
   ui->showDifferenceOnly->setChecked(m_settings->value("showDifferenceOnly",
                                                        false).toBool());
+  m_cmpFont.fromString(m_settings->value("cmpFont").toString());
+
+  ui->netCmpView->setFont(m_cmpFont);
 }
 
 // Деструктор главного окна
@@ -55,6 +62,7 @@ MainWindow::~MainWindow()
   m_settings->setValue("lastDir", m_lastDir);
   m_settings->setValue("showDifferenceOnly",
                        ui->showDifferenceOnly->isChecked());
+  m_settings->setValue("cmpFont", m_cmpFont.toString());
   // Удаление элементов интерфейса окна
   delete ui;
 }
@@ -71,6 +79,85 @@ void MainWindow::on_rightBrowse_clicked()
 {
   // Открытие обозревателя для соответствующего поля ввода
   browse(ui->rightNetlist);
+}
+
+void MainWindow::paintRequested(QPrinter *printer)
+{
+  QPainter painter;
+  QFont font = m_cmpFont;
+  int offset = 20;
+  int lineHeight = QFontMetrics(font).height();
+  int textPos = offset;
+
+  painter.begin(printer);
+  painter.setFont(font);
+
+  int lineHalfWidth = painter.window().width()/2;
+
+  for (int i = 0; i < m_netCmpModel->netEntryCount(); i++)
+  {
+    NetEntry *netEntry = m_netCmpModel->netEntry(i);
+    QModelIndex parentIndex = m_netCmpModel->index(i, 0);
+
+    if (ui->netCmpView->isRowHidden(i, QModelIndex())) continue;
+
+    font.setUnderline(!netEntry->isEqual());
+    painter.setFont(font);
+    painter.setPen(netEntry->isEqual() ? QColor(0, 0, 0) : QColor(255, 20, 20));
+
+    painter.drawText(QRect(0, textPos, lineHalfWidth/2, lineHeight*2), Qt::AlignRight, netEntry->leftDisplayName());
+    painter.drawText(QRect(lineHalfWidth, textPos, lineHalfWidth/2, lineHeight*2), Qt::AlignRight, netEntry->rightDisplayName());
+
+    textPos += lineHeight;
+    if (textPos + lineHeight > painter.window().height() - offset)
+    {
+      textPos = offset;
+      printer->newPage();
+    }
+
+    if (ui->netCmpView->isExpanded(parentIndex))
+    {
+      for (int j = 0; j < netEntry->nodeEntryCount(); j++)
+      {
+        NodeEntry *nodeEntry = netEntry->nodeEntry(j);
+
+        if (ui->netCmpView->isRowHidden(j, parentIndex)) continue;
+
+        font.setUnderline(!nodeEntry->isEqual());
+        painter.setFont(font);
+        painter.setPen(nodeEntry->isEqual() ? QColor(0, 0, 0) : QColor(255, 20, 20));
+
+        painter.drawText(QRect(lineHalfWidth/2, textPos, lineHalfWidth/2, lineHeight*2), Qt::AlignLeft, nodeEntry->leftDisplayName());
+        painter.drawText(QRect(3*lineHalfWidth/2, textPos, lineHalfWidth/2, lineHeight*2), Qt::AlignLeft, nodeEntry->rightDisplayName());
+
+        textPos += lineHeight;
+        if (textPos + lineHeight > painter.window().height() - offset)
+        {
+          textPos = offset;
+          printer->newPage();
+        }
+      }
+    }
+  }
+}
+
+void MainWindow::on_font_clicked()
+{
+  QFontDialog fontDialog(m_cmpFont, this);
+
+  if (fontDialog.exec() == QDialog::Accepted)
+  {
+    m_cmpFont = fontDialog.currentFont();
+    ui->netCmpView->setFont(m_cmpFont);
+  }
+}
+
+void MainWindow::on_print_clicked()
+{
+  QPrintPreviewDialog printPreviewDialog(this);
+
+  connect(&printPreviewDialog, SIGNAL(paintRequested(QPrinter*)), this, SLOT(paintRequested(QPrinter*)));
+  printPreviewDialog.exec();
 }
 
 // Открытие обозревателя для поля ввода
